@@ -1,7 +1,7 @@
-import Quiz from "./Quiz.svelte";
+import App from "./App.svelte";
 
-const quiz = new Quiz({
+const app = new App({
   target: document.body,
 });
 
-export default quiz;
+export default app;

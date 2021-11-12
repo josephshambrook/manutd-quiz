@@ -91,6 +91,7 @@ export default {
       sourceMap: !production,
       inlineSources: !production,
       rootDir: "./src",
+      resolveJsonModule: true,
     }),
 
     // In dev mode, call `npm run start` once

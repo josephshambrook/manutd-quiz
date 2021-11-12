@@ -1,62 +1,18 @@
 <script lang="ts">
-  // packages
-  import { onMount } from "svelte";
-  import {
-    initClient,
-    operationStore,
-    query,
-    dedupExchange,
-    cacheExchange,
-    fetchExchange,
-  } from "@urql/svelte";
-  import { authExchange } from "@urql/exchange-auth";
+  // props
+  export let topGoalscorers = [];
 
   // components
   import Footer from "./components/Footer.svelte";
   import Header from "./components/Header.svelte";
+  import Question from "./components/Question.svelte";
 
   // helpers
-  import {
-    getAuth,
-    addAuthToOperation,
-    willAuthError,
-    didAuthError,
-  } from "./auth";
+  import { populateQuiz } from "./data/populateQuiz";
 
-  // stuff to do as soon as the component is loaded
-  initClient({
-    url: process.env.MANUTD_API_URL,
-    exchanges: [
-      dedupExchange,
-      cacheExchange,
-      authExchange({
-        addAuthToOperation,
-        getAuth,
-        willAuthError,
-        didAuthError,
-      }),
-      fetchExchange,
-    ],
-  });
+  const quiz = populateQuiz({ topGoalscorers });
 
-  const data = operationStore(`#graphql
-    query {
-      Club(teamName: "Manchester United") {
-        # Get fixtures against West Ham
-        FixturesByOpposition(opponent: "West Ham", first: 200, offset: 0) {
-          Competition
-          # Result is always "[Man Utd Goals]:[West Ham Goals]"
-          Result
-          YearStart
-          Place
-        }
-      }
-    }
-  `);
-
-  query(data);
-
-  console.log("data", data);
+  console.log("quiz", quiz);
 </script>
 
 <style>
@@ -99,11 +55,13 @@
 <Header />
 
 <main>
-  <h1>Hello!</h1>
-  <p>
-    Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn
-    how to build Svelte apps.
-  </p>
+  {#each quiz as question, i}
+    <Question
+      question={question.question}
+      allAnswers={[...question.possibleAnswers, question.correctAnswer]}
+      correctAnswer={question.correctAnswer}
+    />
+  {/each}
 </main>
 
 <Footer />
