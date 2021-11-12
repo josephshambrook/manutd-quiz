@@ -48,17 +48,18 @@ export default {
   },
   plugins: [
     // Replace all environment variables manually
-    production
-      ? replace({ "process.env.NODE_ENV": JSON.stringify("production") })
-      : replace({ "process.env.NODE_ENV": JSON.stringify("development") }),
-
     replace({
+      "process.env.NODE_ENV": production
+        ? JSON.stringify("production")
+        : JSON.stringify("development"),
       "process.env.NODE_ENV": JSON.stringify(env.NODE_ENV),
       "process.env.CLIENT_ID": JSON.stringify(env.CLIENT_ID),
       "process.env.CLIENT_SECRET": JSON.stringify(env.CLIENT_SECRET),
-      "process.env.GRANT_TYPE": JSON.stringify(env.GRANT_TYPE),
       "process.env.MANUTD_TOKEN_URL": JSON.stringify(env.MANUTD_TOKEN_URL),
       "process.env.MANUTD_API_URL": JSON.stringify(env.MANUTD_API_URL),
+
+      // replace options
+      preventAssignment: true,
     }),
 
     // Svelte + Rollup compiler options

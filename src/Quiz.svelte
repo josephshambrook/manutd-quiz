@@ -1,7 +1,14 @@
 <script lang="ts">
   // packages
   import { onMount } from "svelte";
-  import { initClient } from "@urql/svelte";
+  import {
+    initClient,
+    operationStore,
+    query,
+    dedupExchange,
+    cacheExchange,
+    fetchExchange,
+  } from "@urql/svelte";
   import { authExchange } from "@urql/exchange-auth";
 
   // components
@@ -9,21 +16,47 @@
   import Header from "./components/Header.svelte";
 
   // helpers
-  import { getAuth, addAuthToOperation, willAuthError } from "./api/auth";
+  import {
+    getAuth,
+    addAuthToOperation,
+    willAuthError,
+    didAuthError,
+  } from "./auth";
 
   // stuff to do as soon as the component is loaded
   initClient({
     url: process.env.MANUTD_API_URL,
     exchanges: [
+      dedupExchange,
+      cacheExchange,
       authExchange({
         addAuthToOperation,
         getAuth,
         willAuthError,
+        didAuthError,
       }),
+      fetchExchange,
     ],
   });
 
-  // onMount(() => {});
+  const data = operationStore(`#graphql
+    query {
+      Club(teamName: "Manchester United") {
+        # Get fixtures against West Ham
+        FixturesByOpposition(opponent: "West Ham", first: 200, offset: 0) {
+          Competition
+          # Result is always "[Man Utd Goals]:[West Ham Goals]"
+          Result
+          YearStart
+          Place
+        }
+      }
+    }
+  `);
+
+  query(data);
+
+  console.log("data", data);
 </script>
 
 <style>

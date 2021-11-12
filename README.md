@@ -19,7 +19,6 @@ You'll need to create an `.env` file containing the following necessary auth det
 ```
 CLIENT_ID=[insert client id]
 CLIENT_SECRET=[insert client secret]
-GRANT_TYPE=[insert grant type]
 MANUTD_TOKEN_URL=https://manutd.auth.eu-west-2.amazoncognito.com/token
 MANUTD_API_URL=https://api.manunited.io/
 ```
