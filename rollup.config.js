@@ -6,11 +6,12 @@ import { terser } from "rollup-plugin-terser";
 import sveltePreprocess from "svelte-preprocess";
 import typescript from "@rollup/plugin-typescript";
 import css from "rollup-plugin-css-only";
-import dotenv from "dotenv";
+import { config } from "dotenv";
+import replace from "@rollup/plugin-replace";
 
 const production = !process.env.ROLLUP_WATCH;
 
-dotenv.config(); // inject the content of the .env file into 'process.env'
+const env = { ...config().parsed };
 
 function serve() {
   let server;
@@ -46,16 +47,31 @@ export default {
     file: "public/build/bundle.js",
   },
   plugins: [
+    // Replace all environment variables manually
+    production
+      ? replace({ "process.env.NODE_ENV": JSON.stringify("production") })
+      : replace({ "process.env.NODE_ENV": JSON.stringify("development") }),
+
+    replace({
+      "process.env.NODE_ENV": JSON.stringify(env.NODE_ENV),
+      "process.env.CLIENT_ID": JSON.stringify(env.CLIENT_ID),
+      "process.env.CLIENT_SECRET": JSON.stringify(env.CLIENT_SECRET),
+      "process.env.GRANT_TYPE": JSON.stringify(env.GRANT_TYPE),
+      "process.env.MANUTD_TOKEN_URL": JSON.stringify(env.MANUTD_TOKEN_URL),
+      "process.env.MANUTD_API_URL": JSON.stringify(env.MANUTD_API_URL),
+    }),
+
+    // Svelte + Rollup compiler options
     svelte({
       preprocess: sveltePreprocess({
         sourceMap: !production,
-        replace: [["process.env.MY_ENV_VAR", process.env.MY_ENV_VAR]],
       }),
       compilerOptions: {
         // enable run-time checks when not in production
         dev: !production,
       },
     }),
+
     // we'll extract any component CSS out into
     // a separate file - better for performance
     css({ output: "bundle.css" }),
@@ -73,6 +89,7 @@ export default {
     typescript({
       sourceMap: !production,
       inlineSources: !production,
+      rootDir: "./src",
     }),
 
     // In dev mode, call `npm run start` once
