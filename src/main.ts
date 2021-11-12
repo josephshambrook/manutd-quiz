@@ -1,10 +1,7 @@
-import App from './App.svelte';
+import Quiz from "./Quiz.svelte";
 
-const app = new App({
-	target: document.body,
-	props: {
-		name: 'world'
-	}
+const quiz = new Quiz({
+  target: document.body,
 });
 
-export default app;
+export default quiz;
