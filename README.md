@@ -1,5 +1,7 @@
 # Manchester United Quiz
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/779e4324-febe-440a-9b99-b289b1b74b9c/deploy-status)](https://app.netlify.com/sites/man-utd-quiz/deploys)
+
 A "Top 10" quiz all about Manchester United statistics. Built with [Svelte] and [manunited.io].
 
 ## Tech
