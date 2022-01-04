@@ -1,54 +1,74 @@
-<script>
-  export let question;
-  export let allAnswers;
-  export let correctAnswer;
+<script type="ts">
+  import { Link } from "svelte-navigator";
+  import { formatTimeLeft } from "../helpers";
+  import type {
+    Player,
+    QuizMultiInputQuestion,
+    QuizSingleChoiceQuestion,
+  } from "../types";
+  import MultiInputQuestion from "./MultiInputQuestion.svelte";
 
-  import { shuffle } from "../data/helpers";
+  export let question:
+    | QuizMultiInputQuestion<Player>
+    | QuizSingleChoiceQuestion;
 
-  const shuffledAnswers = shuffle(allAnswers);
+  $: timeLeft = question.timeLimit;
 
-  let isCorrect;
-  let isAnswered;
+  let timer: number;
 
-  let answerSelected = (answer) => {
-    // return answer === correctAnswer;
-    isAnswered = true;
-    isCorrect = answer === correctAnswer;
-    console.log(answer === correctAnswer);
+  const startTimer = () => {
+    question.state = "running";
+
+    timer = window.setInterval(() => {
+      timeLeft -= 1;
+
+      if (timeLeft <= 0) {
+        finishQuiz();
+      }
+    }, 1000);
+  };
+
+  const finishQuiz = () => {
+    question.state = "finished";
+    clearInterval(timer);
+    timer = 0;
+  };
+
+  const revealAnswers = () => {
+    question.answers = question.answers.map((a) => ({
+      ...a,
+      show: true,
+    }));
   };
 </script>
 
 <style>
-  div {
-    margin-bottom: 10px;
-    padding: 10px;
-  }
-
-  h3 {
-    margin-top: 0;
-  }
-
-  h5.wrong {
-    color: red;
-  }
-
-  h5.isCorrect {
-    color: green;
+  :global(button) {
+    cursor: pointer;
   }
 </style>
 
-<div>
-  <h3>Question: {question}</h3>
+<Link to="/">Back</Link>
 
-  {#each shuffledAnswers as answer}
-    <button on:click={() => answerSelected(answer)} disabled={isAnswered}>
-      {answer}
-    </button>
-  {/each}
+<h2>{question.question}</h2>
 
-  {#if isAnswered}
-    <h5 class:isCorrect class:wrong={!isCorrect}>
-      {#if isCorrect}You got it right{:else}You goofed up{/if}
-    </h5>
+<p>{question.description}</p>
+
+{#if question.state === "initial"}
+  <div>
+    <button type="button" on:click={startTimer}>Start</button>
+  </div>
+{:else}
+  {#if question.state === "running"}
+    <div>Time left: {formatTimeLeft(timeLeft)}</div>
+    <button type="button" on:click={finishQuiz}>Give up</button>
   {/if}
-</div>
+  {#if question.state === "finished"}
+    <div>Time's up!</div>
+    <button type="button" on:click={revealAnswers}>Reveal answers</button>
+  {/if}
+
+  {#if question.type === "multi-input"}
+    <MultiInputQuestion {question} />
+  {/if}
+{/if}

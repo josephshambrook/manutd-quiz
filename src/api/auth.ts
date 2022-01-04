@@ -1,5 +1,5 @@
-import { makeOperation } from "@urql/core";
-import type { AuthTokenResponse } from "./types";
+import { makeOperation } from "@urql/svelte";
+import type { AuthTokenResponse } from "../types";
 
 const STORAGE_KEY_TOKEN = "access-token";
 const STORAGE_TOKEN_EXPIRES = "expires-in";
