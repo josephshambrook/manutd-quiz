@@ -5,9 +5,10 @@ A "Top 10" quiz all about Manchester United statistics. Built with [Svelte] and 
 ## Tech
 
 - [Svelte] - a really nifty JavaScript framework
-- [manunited.io] - a GraphQL API built by Matt Adams
+- [manunited.io] - a GraphQL API built by [Matt Adams]
 - [urql] - a GraphQL client with Svelte bindings
-- [mswjs] - Mock Service Worker, for mocking network requests in an unobtrusive way
+- [MSW] - Mock Service Worker, for mocking network requests locally in an unobtrusive way
+- [Simple CSS] - A classless CSS framework that makes getting started with decent styling easy-peasy
 
 ## Running locally
 
@@ -36,6 +37,10 @@ MANUTD_API_URL=https://api.manunited.io/
 
 - Player statistics
   - Top goalscorers of all time
+
+### Future questions for web app supported by API
+
+- Player statistics
   - Most yellow cards of all time
   - Most red cards of all time
 - Team statistics
@@ -44,10 +49,6 @@ MANUTD_API_URL=https://api.manunited.io/
     - By individual cup (e.g. FA Cup)
 - Manager statistics
   - Most wins in individual competition
-
-### Future questions for web app supported by API
-
--
 
 ### Future but currently unattainable questions
 
@@ -63,3 +64,6 @@ The following is a non-exhaustive list of questions we've thought to add, but th
 [svelte]: https://svelte.dev
 [manunited.io]: https://docs.manunited.io
 [urql]: https://formidable.com/open-source/urql/
+[msw]: https://mswjs.io/
+[simple css]: https://simplecss.org/
+[matt adams]: https://matt.scot/author/matt
