@@ -45,7 +45,7 @@
 
 <main>
   <Route path="/">
-    <h2>Top 10 Questions</h2>
+    <!-- <h2>Top 10 Questions</h2> -->
 
     {#each quiz as question}
       <Card>

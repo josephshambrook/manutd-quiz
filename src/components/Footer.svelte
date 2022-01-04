@@ -1,6 +1,7 @@
 <style>
   footer {
-    border-top: 2px solid var(--theme-primary);
+    /* border-top: 2px solid var(--theme-primary); */
+    border: 0;
     margin-top: 2rem;
     padding: 2rem 1rem;
   }

@@ -6,7 +6,8 @@
   header {
     align-items: center;
     background-color: transparent;
-    border-bottom: 2px solid var(--theme-primary);
+    /* border-bottom: 2px solid var(--theme-primary); */
+    border: 0;
     display: flex;
     justify-content: space-between;
     padding: 2rem 1rem;
