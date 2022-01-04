@@ -21,10 +21,6 @@ export type QuizSingleChoiceAnswer = {
   isCorrect: boolean;
 };
 
-// export type QuizMultiInputAnswer = {
-//   text: string;
-// };
-
 // Quiz questions
 
 export type QuizQuestion = {

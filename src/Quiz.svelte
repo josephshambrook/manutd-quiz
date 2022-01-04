@@ -6,10 +6,11 @@
   import MultiInputQuestion from "./components/MultiInputQuestion.svelte";
   import Card from "./components/Card.svelte";
 
-  // props
   export let quiz = [];
 
-  console.log("quiz", quiz);
+  if (process.env.NODE_ENV === "development") {
+    console.log("quiz", quiz);
+  }
 
   const getQuestion = (id: string) => {
     return quiz.find((q) => q.id === id);
@@ -45,8 +46,6 @@
 
 <main>
   <Route path="/">
-    <!-- <h2>Top 10 Questions</h2> -->
-
     {#each quiz as question}
       <Card>
         <Link to={`/${question.id}`} slot="card-title">
