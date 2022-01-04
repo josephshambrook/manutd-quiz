@@ -57,6 +57,7 @@ export default {
       "process.env.CLIENT_SECRET": JSON.stringify(env.CLIENT_SECRET),
       "process.env.MANUTD_TOKEN_URL": JSON.stringify(env.MANUTD_TOKEN_URL),
       "process.env.MANUTD_API_URL": JSON.stringify(env.MANUTD_API_URL),
+      "process.env.USE_MOCKS": JSON.stringify(process.env.USE_MOCKS),
 
       // replace options
       preventAssignment: true,

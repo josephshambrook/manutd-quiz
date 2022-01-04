@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "build": "rollup -c",
-    "dev": "rollup -c -w",
+    "dev": "rollup -c -w --environment USE_MOCKS",
+    "dev:prod": "rollup -c -w",
     "start": "sirv public --single --no-clear",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },

@@ -1,7 +1,7 @@
 import App from "./App.svelte";
 import { worker } from "./mocks/browser";
 
-if (process.env.NODE_ENV === "development") {
+if (process.env.USE_MOCKS === "true") {
   worker.start();
 }
 
