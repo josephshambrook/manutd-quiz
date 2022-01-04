@@ -5,12 +5,11 @@
   import Question from "./components/Question.svelte";
   import MultiInputQuestion from "./components/MultiInputQuestion.svelte";
   import Card from "./components/Card.svelte";
+  import { safelog } from "./helpers";
 
   export let quiz = [];
 
-  if (process.env.NODE_ENV === "development") {
-    console.log("quiz", quiz);
-  }
+  safelog("quiz", quiz);
 
   const getQuestion = (id: string) => {
     return quiz.find((q) => q.id === id);

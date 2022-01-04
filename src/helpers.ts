@@ -35,3 +35,9 @@ export const formatTimeLeft = (timeLeft: number): string => {
   const seconds = timeLeft % 60;
   return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 };
+
+export const safelog = (...args: unknown[]): void => {
+  if (process.env.NODE_ENV === "development") {
+    console.log(...args);
+  }
+};

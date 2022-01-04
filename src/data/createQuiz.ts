@@ -1,3 +1,4 @@
+import { safelog } from "../helpers.js";
 import type {
   QuizSingleChoiceQuestion,
   QuizMultiInputQuestion,
@@ -38,7 +39,7 @@ const pickWrongAnswers = (dataset = [], correctAnswerIndex = 0) => {
 export const createQuiz = (
   apiData
 ): (QuizSingleChoiceQuestion | QuizMultiInputQuestion<Player>)[] => {
-  console.log(
+  safelog(
     "🚀 ~ file: populateQuiz.ts ~ line 37 ~ createQuiz ~ apiData",
     apiData
   );
