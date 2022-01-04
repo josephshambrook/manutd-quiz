@@ -3,11 +3,12 @@ import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
 import livereload from "rollup-plugin-livereload";
 import { terser } from "rollup-plugin-terser";
+import replace from "@rollup/plugin-replace";
+import json from "@rollup/plugin-json";
 import sveltePreprocess from "svelte-preprocess";
 import typescript from "@rollup/plugin-typescript";
 import css from "rollup-plugin-css-only";
 import { config } from "dotenv";
-import replace from "@rollup/plugin-replace";
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -41,7 +42,7 @@ function serve() {
 export default {
   input: "src/main.ts",
   output: {
-    sourcemap: true,
+    sourcemap: !production,
     format: "iife",
     name: "app",
     file: "public/build/bundle.js",
@@ -52,11 +53,11 @@ export default {
       "process.env.NODE_ENV": production
         ? JSON.stringify("production")
         : JSON.stringify("development"),
-      "process.env.NODE_ENV": JSON.stringify(env.NODE_ENV),
       "process.env.CLIENT_ID": JSON.stringify(env.CLIENT_ID),
       "process.env.CLIENT_SECRET": JSON.stringify(env.CLIENT_SECRET),
       "process.env.MANUTD_TOKEN_URL": JSON.stringify(env.MANUTD_TOKEN_URL),
       "process.env.MANUTD_API_URL": JSON.stringify(env.MANUTD_API_URL),
+      "process.env.USE_MOCKS": JSON.stringify(process.env.USE_MOCKS),
 
       // replace options
       preventAssignment: true,
@@ -85,6 +86,7 @@ export default {
     resolve({
       browser: true,
       dedupe: ["svelte"],
+      preferBuiltins: false,
     }),
     commonjs(),
     typescript({
@@ -93,6 +95,7 @@ export default {
       rootDir: "./src",
       resolveJsonModule: true,
     }),
+    json(),
 
     // In dev mode, call `npm run start` once
     // the bundle has been generated

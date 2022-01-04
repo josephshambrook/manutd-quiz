@@ -1,18 +1,19 @@
 <script lang="ts">
-  // props
-  export let topGoalscorers = [];
-
-  // components
-  import Footer from "./components/Footer.svelte";
+  import { Link, Route } from "svelte-navigator";
   import Header from "./components/Header.svelte";
+  import Footer from "./components/Footer.svelte";
   import Question from "./components/Question.svelte";
+  import MultiInputQuestion from "./components/MultiInputQuestion.svelte";
+  import Card from "./components/Card.svelte";
+  import { safelog } from "./helpers";
 
-  // helpers
-  import { populateQuiz } from "./data/populateQuiz";
+  export let quiz = [];
 
-  const quiz = populateQuiz({ topGoalscorers });
+  safelog("quiz", quiz);
 
-  console.log("quiz", quiz);
+  const getQuestion = (id: string) => {
+    return quiz.find((q) => q.id === id);
+  };
 </script>
 
 <style>
@@ -21,47 +22,42 @@
     --color-red: hsla(4, 77%, 48%, 1);
     /* #FBE122 */
     --color-yellow: hsla(53, 96%, 56%, 1);
-  }
 
-  :global(body) {
     --theme-primary: var(--color-red);
     --theme-secondary: var(--color-yellow);
 
+    --page-padding: 1rem;
+  }
+
+  :global(body) {
+    background-color: #f4f7f5;
     display: grid;
     grid-template-rows: auto 1fr auto;
     min-height: 100vh;
   }
 
   main {
-    padding: 1em;
-    max-width: 240px;
-    margin: 0 auto;
-  }
-
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4em;
-    font-weight: 100;
-  }
-
-  @media (min-width: 640px) {
-    main {
-      max-width: none;
-    }
+    padding: 1rem;
   }
 </style>
 
 <Header />
 
 <main>
-  {#each quiz as question, i}
-    <Question
-      question={question.question}
-      allAnswers={[...question.possibleAnswers, question.correctAnswer]}
-      correctAnswer={question.correctAnswer}
-    />
-  {/each}
+  <Route path="/">
+    {#each quiz as question}
+      <Card>
+        <Link to={`/${question.id}`} slot="card-title">
+          {question.question}
+        </Link>
+      </Card>
+    {/each}
+  </Route>
+
+  <!-- Perfect reasoning for using SvelteKit here -->
+  <Route path=":questionId" let:params>
+    <Question question={getQuestion(params.questionId)} />
+  </Route>
 </main>
 
 <Footer />

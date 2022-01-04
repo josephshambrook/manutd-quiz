@@ -1,0 +1,9 @@
+query AllTimeTopGoalScorers($first: number = 10, $offset) {
+  Club(teamName: "Manchester United") {
+    AllTimeTopGoalScorers(first: 10) {
+      Surname
+      Firstname
+      TotalGoals
+    }
+  }
+}

@@ -1,13 +1,13 @@
 <script>
   import {
     initClient,
-    operationStore,
     query,
     dedupExchange,
     cacheExchange,
     fetchExchange,
   } from "@urql/svelte";
   import { authExchange } from "@urql/exchange-auth";
+  import { Router } from "svelte-navigator";
 
   // components
   import Quiz from "./Quiz.svelte";
@@ -18,7 +18,9 @@
     addAuthToOperation,
     willAuthError,
     didAuthError,
-  } from "./auth";
+  } from "./api/auth";
+  import { runQuizQuery } from "./api/queries";
+  import { createQuiz } from "./data/createQuiz";
 
   // stuff to do as soon as the component is loaded
   initClient({
@@ -36,42 +38,33 @@
     ],
   });
 
-  const resultsAgainstWestHam = operationStore(`#graphql
-    query {
-      Club(teamName: "Manchester United") {
-        # Get fixtures against West Ham
-        FixturesByOpposition(opponent: "West Ham", first: 200, offset: 0) {
-          Competition
-          # Result is always "[Man Utd Goals]:[West Ham Goals]"
-          Result
-          YearStart
-          Place
-        }
+  const apiData = runQuizQuery();
+
+  const generateQuiz = new Promise((resolve, reject) => {
+    $apiData.subscribe((data) => {
+      if (data.error) {
+        return reject(data.error);
       }
-    }
-  `);
 
-  const topGoalscorers = operationStore(`#graphql
-    query {
-      Club(teamName: "Manchester United"){
-        AllTimeTopGoalScorers(first: 30){
-          Surname
-          Firstname
-          TotalGoals
-        }
+      if (!data.fetching && data.data) {
+        const quiz = createQuiz(data.data);
+        return resolve(quiz);
       }
-    }
-  `);
+    });
 
-  query(topGoalscorers);
-
-  // const quizData = getAllData();
+    query(apiData);
+  });
 </script>
 
-{#if $topGoalscorers.fetching}
-  <p>Loading...</p>
-{:else if $topGoalscorers.error}
-  <p>Oh no... {$topGoalscorers.error.message}</p>
-{:else}
-  <Quiz topGoalscorers={$topGoalscorers} />
-{/if}
+{#await generateQuiz}
+  <p>Loading quiz...</p>
+{:then data}
+  <Router>
+    <Quiz quiz={data} />
+  </Router>
+{:catch err}
+  <p>
+    Ah dang, hit an error! Sorry about that - give this page a refresh in case
+    it's something temporary.
+  </p>
+{/await}

@@ -1,5 +1,6 @@
-import { makeOperation } from "@urql/core";
-import type { AuthTokenResponse } from "./types";
+import { makeOperation } from "@urql/svelte";
+import { safelog } from "../helpers";
+import type { AuthTokenResponse } from "../types";
 
 const STORAGE_KEY_TOKEN = "access-token";
 const STORAGE_TOKEN_EXPIRES = "expires-in";
@@ -8,7 +9,7 @@ const calculateExpiryTime = (expirySeconds) =>
   Date.now() + expirySeconds * 1000;
 
 export const getAuth = async ({ authState }) => {
-  console.log("getAuth: authState", authState);
+  safelog("getAuth: authState", authState);
 
   if (!authState) {
     const token = localStorage.getItem(STORAGE_KEY_TOKEN);
@@ -56,7 +57,7 @@ export const getAuth = async ({ authState }) => {
 };
 
 export const addAuthToOperation = ({ authState, operation }) => {
-  console.log("addAuthToOperation: authState", authState);
+  safelog("addAuthToOperation: authState", authState);
 
   // the token isn't in the auth state, return the operation without changes
   if (!authState || !authState.token) {
@@ -84,8 +85,8 @@ export const addAuthToOperation = ({ authState, operation }) => {
 export const willAuthError = ({ authState }): boolean => {
   // check if the token has expired,
   // using the time set when retrieving the token
-  console.log("checking if auth will error");
-  console.log("willAuthError: authState", authState);
+  safelog("checking if auth will error");
+  safelog("willAuthError: authState", authState);
 
   if (!authState) return true;
 
@@ -97,14 +98,14 @@ export const willAuthError = ({ authState }): boolean => {
 export const didAuthError = ({ error }) => {
   // check if the error was an auth error
   // if it is, then we can automatically trigger requesting a new token
-  console.log("checking if auth did error");
-  console.log("didAuthError: error", error);
+  safelog("checking if auth did error");
+  safelog("didAuthError: error", error);
 
   const isAuthError = error.graphQLErrors.some(
     (e) => e.extensions?.code === "UNAUTHENTICATED"
   );
 
-  console.log("isAuthError", isAuthError);
+  safelog("isAuthError", isAuthError);
 
   return isAuthError;
 };
