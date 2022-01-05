@@ -25,7 +25,7 @@ export const getAuth = async ({ authState }) => {
 
   // attempt to get a new token now
   const requestTokenRawResponse = await fetch(
-    `${process.env.MANUTD_TOKEN_URL}?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&grant_type=client_credentials`,
+    `${__muq.env.MANUTD_TOKEN_URL}?client_id=${__muq.env.CLIENT_ID}&client_secret=${__muq.env.CLIENT_SECRET}&grant_type=client_credentials`,
     {
       method: "POST",
       headers: {

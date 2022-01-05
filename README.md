@@ -20,7 +20,8 @@ A "Top 10" quiz all about Manchester United statistics. Built with [Svelte] and 
 2. Install the dependencies via `npm i` or `yarn`
 3. Create an `.env` file containing the relevant auth details for the API (see Environment Variables)
 4. Run `npm run dev` to get the site running in hot-reloading dev mode
-5. Run `npm run build` to build the site in prod mode (and `npm start` to run it)
+5. Run `npm run dev:staging` to run the site in hot-reloading dev mode, but without mocking the API
+6. Run `npm run build` to build the site in prod mode (and `npm start` to run it)
 
 ### Environment variables
 

@@ -8,11 +8,15 @@ import json from "@rollup/plugin-json";
 import sveltePreprocess from "svelte-preprocess";
 import typescript from "@rollup/plugin-typescript";
 import css from "rollup-plugin-css-only";
-import { config } from "dotenv";
+import { config as configDotenv } from "dotenv";
 
 const production = !process.env.ROLLUP_WATCH;
+const settings =
+  process.env.SETTINGS || production ? "production" : "development";
 
-const env = { ...config().parsed };
+configDotenv();
+
+console.log("process.env", process.env);
 
 function serve() {
   let server;
@@ -53,11 +57,16 @@ export default {
       "process.env.NODE_ENV": production
         ? JSON.stringify("production")
         : JSON.stringify("development"),
-      "process.env.CLIENT_ID": JSON.stringify(env.CLIENT_ID),
-      "process.env.CLIENT_SECRET": JSON.stringify(env.CLIENT_SECRET),
-      "process.env.MANUTD_TOKEN_URL": JSON.stringify(env.MANUTD_TOKEN_URL),
-      "process.env.MANUTD_API_URL": JSON.stringify(env.MANUTD_API_URL),
-      "process.env.USE_MOCKS": JSON.stringify(process.env.USE_MOCKS),
+      "__muq.env.NODE_ENV": production
+        ? JSON.stringify("production")
+        : JSON.stringify("development"),
+      "__muq.env.CLIENT_ID": JSON.stringify(process.env.CLIENT_ID),
+      "__muq.env.CLIENT_SECRET": JSON.stringify(process.env.CLIENT_SECRET),
+      "__muq.env.MANUTD_TOKEN_URL": JSON.stringify(
+        process.env.MANUTD_TOKEN_URL
+      ),
+      "__muq.env.MANUTD_API_URL": JSON.stringify(process.env.MANUTD_API_URL),
+      "__muq.env.SETTINGS": JSON.stringify(settings),
 
       // replace options
       preventAssignment: true,

@@ -37,7 +37,7 @@ export const formatTimeLeft = (timeLeft: number): string => {
 };
 
 export const safelog = (...args: unknown[]): void => {
-  if (process.env.NODE_ENV === "development") {
+  if (__muq.env.NODE_ENV === "development") {
     console.log(...args);
   }
 };

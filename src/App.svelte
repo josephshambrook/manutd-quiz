@@ -24,7 +24,7 @@
 
   // stuff to do as soon as the component is loaded
   initClient({
-    url: process.env.MANUTD_API_URL,
+    url: __muq.env.MANUTD_API_URL,
     exchanges: [
       dedupExchange,
       cacheExchange,
