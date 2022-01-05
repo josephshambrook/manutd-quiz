@@ -5,7 +5,7 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "dev:prod": "rollup -c -w --environment SETTINGS=staging",
+    "dev:staging": "rollup -c -w --environment SETTINGS=staging",
     "start": "sirv public --single --no-clear",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
